@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.questionnaire.databinding.ActivityUploadBinding;
 import com.google.firebase.database.DatabaseReference;
@@ -19,11 +18,8 @@ import java.util.ArrayList;
 public class UploadActivity extends AppCompatActivity {
 
     private static ActivityUploadBinding binding_upload;
-    Button saveButton, enterButton;
     Integer flag = 0;
     EditText uploadTopic;
-    FirebaseDatabase database;
-    DatabaseReference reference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +28,7 @@ public class UploadActivity extends AppCompatActivity {
         setContentView(view);
 
         uploadTopic = binding_upload.uploadTopic;
-        enterButton = binding_upload.enterButton;
+        Button enterButton = binding_upload.enterButton;
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -62,8 +58,8 @@ public class UploadActivity extends AppCompatActivity {
         if (!validateData())
             return;
 
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference("surveys");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference("surveys");
 
         ArrayList<String> users = new ArrayList<String>();
 

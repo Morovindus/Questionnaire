@@ -9,7 +9,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.example.questionnaire.databinding.ItemAnswersBinding;
-import com.example.questionnaire.databinding.ItemBinding;
 
 import java.util.ArrayList;
 

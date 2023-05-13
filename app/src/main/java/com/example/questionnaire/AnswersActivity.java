@@ -1,28 +1,17 @@
 package com.example.questionnaire;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.questionnaire.databinding.ActivityAnswersBinding;
-import com.example.questionnaire.databinding.ActivityDetailBinding;
 import com.example.questionnaire.databinding.FooterBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,15 +24,12 @@ import java.util.ArrayList;
 public class AnswersActivity extends AppCompatActivity {
     ArrayList<Answer> answers;
     ListView lvMain;
-    ValueEventListener eventListener;
-    DatabaseReference reference;
     FirebaseDatabase database;
     BoxAdapterAnswer adapter;
     String describe, question, name;
     private ActivityAnswersBinding binding_answers;
     private static FooterBinding binding_footer;
     Integer countQuestion;
-    Button buttonNew;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +40,6 @@ public class AnswersActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-
-
 
         Button buttonNew = binding_footer.createButton;
         buttonNew.setText("Следующий вопрос");
@@ -74,8 +58,6 @@ public class AnswersActivity extends AppCompatActivity {
         checkQuestion(question);
         setQuestion(question);
         setAnswers(question);
-
-
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,10 +126,13 @@ public class AnswersActivity extends AppCompatActivity {
     }
 
     public void setQuestion(String _question){
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference("surveys").child(describe).child(_question).child("describe");
+        FirebaseDatabase _database = FirebaseDatabase.getInstance();
+        DatabaseReference _reference = _database.getReference("surveys")
+                .child(describe)
+                .child(_question)
+                .child("describe");
 
-        reference.addValueEventListener(new ValueEventListener() {
+        _reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String post = dataSnapshot.getValue(String.class);
@@ -162,9 +147,9 @@ public class AnswersActivity extends AppCompatActivity {
     }
 
     public void setAnswers(String _question){
-        reference = FirebaseDatabase.getInstance().getReference("surveys").child(describe).child(_question).child("Answers");
+        DatabaseReference _reference = FirebaseDatabase.getInstance().getReference("surveys").child(describe).child(_question).child("Answers");
 
-        eventListener = reference.addValueEventListener(new ValueEventListener() {
+        _reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 answers.clear();

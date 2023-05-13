@@ -1,16 +1,12 @@
 package com.example.questionnaire;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 
 import com.example.questionnaire.databinding.ItemBinding;
@@ -42,7 +38,6 @@ public class BoxAdapter extends BaseAdapter {
         return position;
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ItemBinding binding = ItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);

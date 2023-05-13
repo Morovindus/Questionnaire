@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="697dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/lavender_border"
+                android:background="@color/white"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -43,17 +43,24 @@
                     android:textColor="@color/lavender"
                     android:textSize="25sp" />
 
-
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieCharts"
+                <ScrollView
+                    android:id="@+id/scroll2"
                     android:layout_width="match_parent"
-                    android:layout_height="488dp" />
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/linear"
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+                    </LinearLayout>
+                </ScrollView>
 
 
                 <Button
                     android:id="@+id/button_back"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="10dp"
                     android:text="Вернуться на главное меню"
                     android:textSize="17sp"

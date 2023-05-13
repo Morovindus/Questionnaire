@@ -44,10 +44,10 @@
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="50dp"
                 android:text="Сохранить и продолжить"
                 android:id="@+id/enterButton"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/lavender_border"
                 android:backgroundTint="@color/lavender"/>

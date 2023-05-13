@@ -24,20 +24,15 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-
     ArrayList<Surveys> surveys;
-    ListView lvMain;
-    DatabaseReference reference;
-    ValueEventListener eventListener;
     String name;
-    private static ActivityMainBinding binding_main;
-    private static FooterBinding binding_footer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding_main = ActivityMainBinding.inflate(getLayoutInflater());
-        binding_footer = FooterBinding.inflate(getLayoutInflater());
+
+        ActivityMainBinding binding_main = ActivityMainBinding.inflate(getLayoutInflater());
+        FooterBinding binding_footer = FooterBinding.inflate(getLayoutInflater());
         View view = binding_main.getRoot();
         setContentView(view);
 
@@ -48,11 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
         surveys = new ArrayList<Surveys>();
 
-        reference = FirebaseDatabase.getInstance().getReference("surveys");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("surveys");
 
         BoxAdapter adapter = new BoxAdapter(MainActivity.this, surveys);
 
-        eventListener = reference.addValueEventListener(new ValueEventListener() {
+        ValueEventListener eventListener = reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 surveys.clear();
@@ -87,9 +82,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ListView lvMain = binding_main.lvMain;
 
-        lvMain = binding_main.lvMain;
-        lvMain.addFooterView(binding_footer.getRoot());
+        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("moderators");
+        eventListener = reference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                ArrayList<String> moderators = new ArrayList<String>();
+
+                for (DataSnapshot itemSnapshot: snapshot.getChildren()){
+                    String dataClass = itemSnapshot.getValue(String.class);
+
+                    moderators.add(dataClass);
+
+                    for (String w : moderators){
+                        if (Objects.equals(w, name)){
+                            lvMain.addFooterView(binding_footer.getRoot());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         lvMain.setAdapter(adapter);
 
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.questionnaire.databinding.ActivityInstructionBinding;
-import com.example.questionnaire.databinding.ActivityReferenceInformationBinding;
 
 public class Instruction extends AppCompatActivity {
 

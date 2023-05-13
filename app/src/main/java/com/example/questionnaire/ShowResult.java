@@ -8,8 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
-import com.example.questionnaire.databinding.ActivityLoginBinding;
 import com.example.questionnaire.databinding.ActivityShowResultBinding;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -23,9 +23,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShowResult extends AppCompatActivity {
     private ActivityShowResultBinding binding;
+    private List<View> allEds;
+    Integer countQuestion = 1;
+    String question;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,54 +41,70 @@ public class ShowResult extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        final LinearLayout linear = binding.linear;
+
         Intent intent2 = getIntent();
         String describe = intent2.getStringExtra("describe");
         String name = intent2.getStringExtra("name");
 
-        Integer countQuestion = 1;
-        String question = "Question №" + countQuestion.toString();
-        ArrayList<PieEntry> answers = new ArrayList<>();
+        question = "Question №" + countQuestion.toString();
 
-        Log.d("myLogs", "Start");
+        allEds = new ArrayList<View>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference("surveys").child(describe).child(question);
+        DatabaseReference reference = database.getReference("surveys").child(describe);
 
-        Log.d("myLogs", "Request");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String _question = dataSnapshot.child("describe").getValue(String.class);
-                PieChart pieChart = binding.pieCharts;
-                answers.clear();
 
-                for (DataSnapshot itemSnapshot: dataSnapshot.child("Answers").getChildren()){
-                    String answer = itemSnapshot.child("answer").getValue(String.class);
-                    Integer quantity = itemSnapshot.child("quantity").getValue(Integer.class);
+                while (true){
 
-                    if (quantity != 0)
-                        answers.add(new PieEntry(quantity, answer));
+                    ArrayList<PieEntry> answers = new ArrayList<>();
 
+                    String _question = dataSnapshot.child(question).child("describe").getValue(String.class);
+                    try {
+                        Log.d("myLogs", _question);
+                    } catch (Throwable t){
+                        return;
+                    }
+
+                    final View view2 = getLayoutInflater().inflate(R.layout.circle, null);
+
+                    linear.addView(view2);
+                    allEds.add(view2);
+
+                    PieChart pieChart = (((PieChart) allEds.get(countQuestion - 1).findViewById(R.id.pieCharts)));
+
+                        answers.clear();
+
+                        for (DataSnapshot itemSnapshot : dataSnapshot.child(question).child("Answers").getChildren()) {
+                            String answer = itemSnapshot.child("answer").getValue(String.class);
+                            Integer quantity = itemSnapshot.child("quantity").getValue(Integer.class);
+
+                            if (quantity != 0)
+                                answers.add(new PieEntry(quantity, answer));
+
+                        }
+
+                        PieDataSet pieDataSet = new PieDataSet(answers, "Опрос");
+                        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                        pieDataSet.setValueTextColor(Color.BLACK);
+                        pieDataSet.setValueTextSize(16f);
+
+                        PieData pieData = new PieData(pieDataSet);
+
+                        pieChart.setData(pieData);
+                        pieChart.getDescription().setEnabled(false);
+                        pieChart.setCenterText(_question);
+                        pieChart.animate();
+
+                        countQuestion++;
+                        question = "Question №" + countQuestion.toString();
+                    }
                 }
 
-                Log.d("myLogs", "Read");
-
-                PieDataSet pieDataSet = new PieDataSet(answers, "Опрос");
-                pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-                pieDataSet.setValueTextColor(Color.BLACK);
-                pieDataSet.setValueTextSize(16f);
-
-                PieData pieData = new PieData(pieDataSet);
-
-                pieChart.setData(pieData);
-                pieChart.getDescription().setEnabled(false);
-                pieChart.setCenterText(_question);
-                pieChart.animate();
-
-                Log.d("myLogs", "End");
-
-            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

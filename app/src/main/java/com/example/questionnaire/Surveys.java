@@ -1,8 +1,5 @@
 package com.example.questionnaire;
 
-
-import java.util.ArrayList;
-
 public class Surveys {
 
     String describe;

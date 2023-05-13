@@ -4,7 +4,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ public class QuestionCreator extends AppCompatActivity {
     private List<View> allEds;
     private Integer counter = 0;
     private Integer questions = 0;
-    Context ctx;
     private Integer counterQuestions = 1;
     String title, name;
     private ActivityQuestionCreatorBinding binding;
@@ -66,9 +64,10 @@ public class QuestionCreator extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(QuestionCreator.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(QuestionCreator.this, R.style.AlertDialog);
 
-                builder.setMessage("Вы уверены что хотите выйти?\n\nНесохраненные данные будут потеряны")
+                builder
+                        .setMessage("Вы уверены что хотите выйти?\n\nНесохраненные данные будут потеряны")
                         .setCancelable(false)
                         .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                             @Override

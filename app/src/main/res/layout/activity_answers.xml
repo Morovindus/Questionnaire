@@ -22,7 +22,7 @@
             android:orientation="vertical"
             android:layout_gravity="center_horizontal"
             android:padding="24dp"
-            android:background="@drawable/lavender_border">
+            android:background="@color/white">
 
 
             <TextView
@@ -47,7 +47,6 @@
                 android:dividerHeight="10.0sp"
                 android:paddingHorizontal="15dip">
             </ListView>
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

@@ -23,7 +23,7 @@
             android:orientation="vertical"
             android:layout_gravity="center_horizontal"
             android:padding="24dp"
-            android:background="@drawable/lavender_border">
+            android:background="@color/white">
 
             <TextView
                 android:layout_width="match_parent"
@@ -39,14 +39,12 @@
             <Button
                 android:id="@+id/button_back"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginRight="10dp"
                 android:text="Вернуться на главный экран"
                 android:textSize="17sp"
                 android:background="@drawable/lavender_border"
                 android:backgroundTint="@color/lavender" />
-
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
