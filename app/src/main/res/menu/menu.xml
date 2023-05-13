@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item1"
+        android:title="ГГ"
+        android:icon="@drawable/baseline_help_70"
+        app:showAsAction="ifRoom">
+    </item>
+    <item
+        android:id="@+id/item2"
+        android:icon="@drawable/baseline_info_24"
+        android:title="Имя"
+        app:showAsAction="ifRoom">
+    </item>
+    <item
+        android:id="@+id/item3"
+        android:icon="@drawable/baseline_exit_to_app_24"
+        android:title="РСТ"
+        app:showAsAction="ifRoom">
+    </item>
+</menu>

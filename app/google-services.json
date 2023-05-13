@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "520042636249",
+    "project_id": "questionnaire-a5b4a",
+    "storage_bucket": "questionnaire-a5b4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520042636249:android:5bc21b250d99b97e95efc8",
+        "android_client_info": {
+          "package_name": "com.example.questionnaire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "520042636249-tgmou9cjfo9m8m6gknqgv0aiauteieda.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxUDy_x2i-jyTW8zSx_QqPG0ADwZ35Am8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "520042636249-tgmou9cjfo9m8m6gknqgv0aiauteieda.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
