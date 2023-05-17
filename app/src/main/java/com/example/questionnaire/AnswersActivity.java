@@ -1,14 +1,19 @@
 package com.example.questionnaire;
 
+import static android.widget.AbsListView.CHOICE_MODE_SINGLE;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.questionnaire.databinding.ActivityAnswersBinding;
 import com.example.questionnaire.databinding.FooterBinding;
@@ -25,11 +30,11 @@ public class AnswersActivity extends AppCompatActivity {
     ArrayList<Answer> answers;
     ListView lvMain;
     FirebaseDatabase database;
-    BoxAdapterAnswer adapter;
     String describe, question, name;
     private ActivityAnswersBinding binding_answers;
     private static FooterBinding binding_footer;
     Integer countQuestion;
+    Boolean flagSelection = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,15 +54,12 @@ public class AnswersActivity extends AppCompatActivity {
         name = intent2.getStringExtra("name");
 
         answers = new ArrayList<Answer>();
-        adapter = new BoxAdapterAnswer(AnswersActivity.this, answers);
-
 
         countQuestion = 1;
         question = "Question №" + countQuestion.toString();
 
         checkQuestion(question);
-        setQuestion(question);
-        setAnswers(question);
+
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,18 +102,60 @@ public class AnswersActivity extends AppCompatActivity {
                 checkQuestion(question);
             }
         });
+
     }
 
     public void checkQuestion(String _question){
-        FirebaseDatabase _database = FirebaseDatabase.getInstance();
 
-        Query checkUserDatabase = _database.getReference("surveys").child(describe).child(_question).child("describe");
+        Query checkUserDatabase = FirebaseDatabase.getInstance().getReference("surveys")
+                .child(describe)
+                .child(_question);
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    setQuestion(_question);
-                    setAnswers(_question);
+                if (snapshot.child("describe").exists()) {
+
+                    String post = snapshot.child("describe").getValue(String.class);
+                    binding_answers.question.setText(post);
+
+                    answers = new ArrayList<Answer>();
+                    lvMain = binding_answers.lvMain;
+                    BoxAdapterAnswer adapter = new BoxAdapterAnswer(AnswersActivity.this, answers);;
+                    BoxAdapterAnswersSingle adapterSingle =  new BoxAdapterAnswersSingle(AnswersActivity.this, answers);
+
+                    answers.clear();
+                    for (DataSnapshot itemSnapshot: snapshot
+                            .child("Answers")
+                            .getChildren()){
+                        String dataClass = itemSnapshot.child("answer").getValue(String.class);
+                        Answer helper = new Answer(dataClass, false);
+                        answers.add(helper);
+                    }
+
+                    flagSelection = snapshot.child("selection").getValue(Boolean.class);
+                    if (!flagSelection){
+                        adapter.notifyDataSetChanged();
+                        lvMain.addFooterView(binding_footer.getRoot());
+                        lvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                        lvMain.setAdapter(adapter);
+                    } else {
+                        adapterSingle.notifyDataSetChanged();
+                        lvMain.addFooterView(binding_footer.getRoot());
+                        lvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                        lvMain.setAdapter(adapterSingle);
+
+                        lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                        {
+                            @Override
+                            public void onItemClick(AdapterView <? > parent, View view, int position, long id)
+                            {
+                                adapterSingle.setSelectedIndex(position);
+                                adapterSingle.notifyDataSetChanged();
+                            }
+                        });
+                    }
+
+
                 } else {
                     Intent intent = new Intent(AnswersActivity.this, FinalActivity.class);
                     intent.putExtra("name", name);
@@ -123,51 +167,5 @@ public class AnswersActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-    }
-
-    public void setQuestion(String _question){
-        FirebaseDatabase _database = FirebaseDatabase.getInstance();
-        DatabaseReference _reference = _database.getReference("surveys")
-                .child(describe)
-                .child(_question)
-                .child("describe");
-
-        _reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String post = dataSnapshot.getValue(String.class);
-                binding_answers.question.setText(post);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void setAnswers(String _question){
-        DatabaseReference _reference = FirebaseDatabase.getInstance().getReference("surveys").child(describe).child(_question).child("Answers");
-
-        _reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                answers.clear();
-                for (DataSnapshot itemSnapshot: snapshot.getChildren()){
-                    String dataClass = itemSnapshot.child("answer").getValue(String.class);
-                    Answer helper = new Answer(dataClass, false);
-                    answers.add(helper);
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-        lvMain = binding_answers.lvMain;
-        lvMain.addFooterView(binding_footer.getRoot());
-        lvMain.setAdapter(adapter);
     }
 }

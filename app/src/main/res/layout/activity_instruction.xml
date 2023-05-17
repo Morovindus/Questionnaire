@@ -43,7 +43,8 @@
                 android:padding="10dp"
                 android:layout_marginTop="12dp"
                 android:textSize="18sp"
-                android:textColor="@color/lavender"/>
+                android:textColor="@color/lavender"
+                app:autoSizeTextType="uniform"/>
 
             <Button
                 android:layout_width="match_parent"

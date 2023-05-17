@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.questionnaire.databinding.ActivityQuestionCreatorBinding;
@@ -20,12 +22,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionCreator extends AppCompatActivity {
+public class QuestionCreator extends AppCompatActivity implements
+        CompoundButton.OnCheckedChangeListener{
     private List<View> allEds;
     private Integer counter = 0;
     private Integer questions = 0;
     private Integer counterQuestions = 1;
     String title, name;
+    Boolean flagSelection = false;
     private ActivityQuestionCreatorBinding binding;
 
     @Override
@@ -43,6 +47,9 @@ public class QuestionCreator extends AppCompatActivity {
         Button newButton = binding.buttonNew;
         Button exitButton = binding.buttonExit;
         Button saveButton = binding.buttonSave;
+
+        Switch switch_button = binding.switchButton;
+        switch_button.setOnCheckedChangeListener(this);
 
         Intent intent2 = getIntent();
         title = intent2.getStringExtra("title");
@@ -138,7 +145,7 @@ public class QuestionCreator extends AppCompatActivity {
                     String question = "Question №" + counterQuestions;
                     counterQuestions++;
 
-                    HelperQuestion helperQuestion = new HelperQuestion(binding.question.getText().toString());
+                    HelperQuestion helperQuestion = new HelperQuestion(binding.question.getText().toString(), flagSelection);
 
                     DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("surveys").child(title);
 
@@ -196,7 +203,7 @@ public class QuestionCreator extends AppCompatActivity {
 
                 String question = "Question №" + counterQuestions;
 
-                HelperQuestion helperQuestion = new HelperQuestion(binding.question.getText().toString());
+                HelperQuestion helperQuestion = new HelperQuestion(binding.question.getText().toString(), flagSelection);
 
                 DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("surveys").child(title);
 
@@ -227,6 +234,17 @@ public class QuestionCreator extends AppCompatActivity {
         } else {
             binding.question.setError(null);
             return true;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (!isChecked){
+            Toast.makeText(QuestionCreator.this, "Множественный", Toast.LENGTH_LONG).show();
+            flagSelection = false;
+        } else {
+            Toast.makeText(QuestionCreator.this, "Одиночный", Toast.LENGTH_LONG).show();
+            flagSelection = true;
         }
     }
 

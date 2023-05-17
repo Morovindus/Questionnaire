@@ -1,14 +1,18 @@
 package com.example.questionnaire;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.questionnaire.databinding.ActivityShowResultBinding;
 import com.github.mikephil.charting.charts.PieChart;
@@ -24,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowResult extends AppCompatActivity {
     private ActivityShowResultBinding binding;
@@ -47,13 +52,44 @@ public class ShowResult extends AppCompatActivity {
         String describe = intent2.getStringExtra("describe");
         String name = intent2.getStringExtra("name");
 
+
+        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("moderators");
+        ValueEventListener eventListener = reference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                ArrayList<String> moderators = new ArrayList<String>();
+                Boolean flag = false;
+
+                for (DataSnapshot itemSnapshot: snapshot.getChildren()){
+                    String dataClass = itemSnapshot.getValue(String.class);
+
+                    moderators.add(dataClass);
+
+                    for (String w : moderators){
+                        if (Objects.equals(w, name)){
+                            flag = true;
+                            binding.buttonClose.setEnabled(true);
+                        }
+                    }
+                    if (!flag){
+                        binding.buttonClose.setBackgroundColor(Color.rgb(255,255,255));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         question = "Question №" + countQuestion.toString();
 
         allEds = new ArrayList<View>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("surveys").child(describe);
-
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -118,6 +154,43 @@ public class ShowResult extends AppCompatActivity {
                 Intent intent = new Intent(ShowResult.this, MainActivity.class);
                 intent.putExtra("name", name);
                 startActivity(intent);
+            }
+        });
+
+        binding.buttonClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ShowResult.this, R.style.AlertDialog);
+
+                builder
+                        .setMessage("Вы уверены что хотите безвозвратно удалить данный опрос?\n")
+                        .setCancelable(false)
+                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                FirebaseDatabase.getInstance()
+                                        .getReference("surveys")
+                                        .child(describe).removeValue();
+                                Toast.makeText(ShowResult.this, "Успешно удалено", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(ShowResult.this, MainActivity.class);
+                                intent.putExtra("name", name);
+                                startActivity(intent);
+
+                                finish();
+                            }
+                        })
+
+                        .setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
     }
