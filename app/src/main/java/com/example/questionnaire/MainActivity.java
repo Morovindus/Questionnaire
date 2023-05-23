@@ -2,6 +2,7 @@ package com.example.questionnaire;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,18 +55,24 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot itemSnapshot: snapshot.getChildren()){
                     String dataClass = itemSnapshot.child("describe").getValue(String.class);
-                    boolean check = false;
+                    Integer check = 0;
 
                     ArrayList<String> users = new ArrayList<String>();
 
-                    for (DataSnapshot postSnapshot: itemSnapshot.child("users").getChildren()) {
-                        String post = postSnapshot.getValue(String.class);
-                        users.add(post);
-                    }
+                    String creator = itemSnapshot.child("creator").getValue(String.class);
 
-                    for (String w : users){
-                        if (Objects.equals(w, name)){
-                            check = true;
+                    if (Objects.equals(name, creator)){
+                        check = 1;
+                    } else {
+                        for (DataSnapshot postSnapshot : itemSnapshot.child("users").getChildren()) {
+                            String post = postSnapshot.getValue(String.class);
+                            users.add(post);
+                        }
+
+                        for (String w : users) {
+                            if (Objects.equals(w, name)) {
+                                check = 2;
+                            }
                         }
                     }
 
@@ -83,8 +90,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ListView lvMain = binding_main.lvMain;
+        lvMain.addFooterView(binding_footer.getRoot());
 
-        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("moderators");
+        /*DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("moderators");
         eventListener = reference2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,15 +117,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        */
 
         lvMain.setAdapter(adapter);
 
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                boolean checkQuiz = surveys.get(position).check;
+                Integer checkQuiz = surveys.get(position).check;
                 Intent intent;
-                if (checkQuiz){
+                if (checkQuiz == 2 || checkQuiz == 1){
                     intent = new Intent(MainActivity.this, EndPool.class);
                 } else {
                     intent = new Intent(MainActivity.this, DetailActivity.class);
@@ -160,6 +169,11 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("name", name);
             startActivity(intent);
         }  else if (id == R.id.item3)
+        {
+            intent = new Intent(MainActivity.this, AuthorInformation.class);
+            intent.putExtra("name", name);
+            startActivity(intent);
+        } else if (id == R.id.item4)
         {
             intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);

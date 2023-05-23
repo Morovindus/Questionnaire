@@ -84,6 +84,7 @@ public class ShowResult extends AppCompatActivity {
             }
         });
 
+
         question = "Question №" + countQuestion.toString();
 
         allEds = new ArrayList<View>();
@@ -98,6 +99,15 @@ public class ShowResult extends AppCompatActivity {
                 while (true){
 
                     ArrayList<PieEntry> answers = new ArrayList<>();
+
+                    String creator = dataSnapshot.child("creator").getValue(String.class);
+
+                    Log.d("myLogs", creator);
+                    Log.d("myLogs", name);
+
+                    if (Objects.equals(name, creator)){
+                        binding.buttonClose.setEnabled(true);
+                    }
 
                     String _question = dataSnapshot.child(question).child("describe").getValue(String.class);
                     try {

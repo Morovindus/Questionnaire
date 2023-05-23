@@ -3,15 +3,7 @@ package com.example.questionnaire;
 public class Surveys {
 
     String describe;
-    boolean check;
-
-    public boolean isCheck() {
-        return check;
-    }
-
-    public void setCheck(boolean check) {
-        this.check = check;
-    }
+    Integer check;
 
     public String getDescribe() {
         return describe;
@@ -21,8 +13,15 @@ public class Surveys {
         this.describe = describe;
     }
 
+    public Integer getCheck() {
+        return check;
+    }
 
-    public Surveys(String describe, boolean check) {
+    public void setCheck(Integer check) {
+        this.check = check;
+    }
+
+    public Surveys(String describe, Integer check) {
         this.describe = describe;
         this.check = check;
     }

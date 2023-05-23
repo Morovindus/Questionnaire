@@ -4,20 +4,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item1"
-        android:title="ГГ"
+        android:title="Инструкция"
         android:icon="@drawable/baseline_help_70"
         app:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/item2"
         android:icon="@drawable/baseline_info_24"
-        android:title="Имя"
+        android:title="О приложении"
         app:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/item3"
+        android:icon="@drawable/baseline_person_24_white"
+        android:title="Об авторе"
+        app:showAsAction="ifRoom">
+    </item>
+    <item
+        android:id="@+id/item4"
         android:icon="@drawable/baseline_exit_to_app_24"
-        android:title="РСТ"
+        android:title="Выход"
         app:showAsAction="ifRoom">
     </item>
 </menu>

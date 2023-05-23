@@ -4,8 +4,16 @@ import java.util.ArrayList;
 
 public class HelperClass2 {
 
-    String describe;
+    String describe, creator;
     ArrayList<String> users;
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 
     public ArrayList<String> getUsers() {
         return users;
@@ -22,8 +30,9 @@ public class HelperClass2 {
     public void setDescribe(String describe) {
         this.describe = describe;
     }
-    public HelperClass2(String describe, ArrayList<String> users){
+    public HelperClass2(String describe, ArrayList<String> users, String creator){
         this.describe = describe;
         this.users = users;
+        this.creator = creator;
     }
 }

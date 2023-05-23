@@ -41,6 +41,7 @@
                 android:layout_height="50dp"
                 android:layout_marginRight="10dp"
                 android:text="Просмотреть результаты"
+                android:textColor="@color/white"
                 android:textSize="17sp"
                 android:background="@drawable/lavender_border"
                 android:backgroundTint="@color/lavender" />

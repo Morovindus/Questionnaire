@@ -19,6 +19,7 @@ public class UploadActivity extends AppCompatActivity {
 
     private static ActivityUploadBinding binding_upload;
     Integer flag = 0;
+    String name;
     EditText uploadTopic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class UploadActivity extends AppCompatActivity {
         actionBar.hide();
 
         Intent intent2 = getIntent();
-        String name = intent2.getStringExtra("name");
+        name = intent2.getStringExtra("name");
 
         enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +64,9 @@ public class UploadActivity extends AppCompatActivity {
 
         ArrayList<String> users = new ArrayList<String>();
 
-        users.add("Admin");
+        users.add("0");
 
-        HelperClass2 helperClass = new HelperClass2(title, users);
+        HelperClass2 helperClass = new HelperClass2(title, users, name);
         reference.child(title).setValue(helperClass);
 
     }

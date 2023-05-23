@@ -44,8 +44,10 @@ public class BoxAdapter extends BaseAdapter {
 
         Surveys p = getSurveys(position);
         binding.tvDescribe.setText(p.describe);
-        if (p.check){
-            binding.lineCard.setCardBackgroundColor(Color.rgb(57,255,20));
+        if (p.check == 2) {
+            binding.lineCard.setCardBackgroundColor(Color.rgb(57, 255, 20));
+        } else if (p.check == 1){
+            binding.lineCard.setCardBackgroundColor(Color.rgb(255, 255, 0));
         } else
             binding.lineCard.setCardBackgroundColor(Color.rgb(134,146,247));
         //binding.ivImage.setImageResource(p.image);

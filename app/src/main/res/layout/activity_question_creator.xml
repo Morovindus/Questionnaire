@@ -95,6 +95,7 @@
                         android:layout_height="50dp"
                         android:layout_marginRight="10dp"
                         android:text="Добавить ответ"
+                        android:textColor="@color/white"
                         android:textSize="15sp"
                         android:background="@drawable/lavender_border"
                         android:backgroundTint="@color/lavender" />
@@ -104,6 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:text="Удалить ответ"
+                        android:textColor="@color/white"
                         android:textSize="15sp"
                         android:background="@drawable/lavender_border"
                         android:backgroundTint="@color/lavender" />
@@ -115,6 +117,7 @@
                     android:text="Добавить новый вопрос"
                     android:id="@+id/button_new"
                     android:textSize="17sp"
+                    android:textColor="@color/white"
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/lavender_border"
@@ -132,6 +135,7 @@
                         android:layout_height="50dp"
                         android:layout_marginRight="10dp"
                         android:text="Сохранить"
+                        android:textColor="@color/white"
                         android:textSize="17sp"
                         android:background="@drawable/lavender_border"
                         android:backgroundTint="@color/lavender" />
@@ -141,6 +145,7 @@
                         android:layout_width="120dp"
                         android:layout_height="50dp"
                         android:text="Выйти"
+                        android:textColor="@color/white"
                         android:textSize="17sp"
                         android:background="@drawable/lavender_border"
                         android:backgroundTint="@color/lavender" />
