@@ -14,39 +14,6 @@
         android:theme="@style/Theme.Questionnaire"
         tools:targetApi="31">
         <activity
-            android:name=".AuthorInformation"
-            android:exported="false" />
-        <activity
-            android:name=".ShowResult"
-            android:exported="false" />
-        <activity
-            android:name=".EndPool"
-            android:exported="false" />
-        <activity
-            android:name=".FinalActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AnswersActivity"
-            android:exported="false" />
-        <activity
-            android:name=".QuestionCreator"
-            android:exported="false" />
-        <activity
-            android:name=".DetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UploadActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Instruction"
-            android:exported="false" />
-        <activity
-            android:name=".ReferenceInformation"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
             android:name=".SignupActivity"
             android:exported="true">
             <intent-filter>

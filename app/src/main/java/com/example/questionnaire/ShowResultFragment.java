@@ -1,20 +1,22 @@
 package com.example.questionnaire;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.questionnaire.databinding.ActivityShowResultBinding;
+import com.example.questionnaire.databinding.FragmentShowResultBinding;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -30,27 +32,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ShowResult extends AppCompatActivity {
-    private ActivityShowResultBinding binding;
+public class ShowResultFragment extends Fragment {
+
+    private FragmentShowResultBinding binding;
+    String describe, nameUser;
     private List<View> allEds;
     Integer countQuestion = 1;
     String question;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityShowResultBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        super.onCreate(savedInstanceState);
+
+        binding = FragmentShowResultBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        nameUser = ((MainActivity)getActivity()).name;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            describe = bundle.getString("describe");
+        }
 
         final LinearLayout linear = binding.linear;
-
-        Intent intent2 = getIntent();
-        String describe = intent2.getStringExtra("describe");
-        String name = intent2.getStringExtra("name");
 
 
         DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("moderators");
@@ -67,7 +72,7 @@ public class ShowResult extends AppCompatActivity {
                     moderators.add(dataClass);
 
                     for (String w : moderators){
-                        if (Objects.equals(w, name)){
+                        if (Objects.equals(w, nameUser)){
                             flag = true;
                             binding.buttonClose.setEnabled(true);
                         }
@@ -92,7 +97,7 @@ public class ShowResult extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("surveys").child(describe);
 
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -103,9 +108,9 @@ public class ShowResult extends AppCompatActivity {
                     String creator = dataSnapshot.child("creator").getValue(String.class);
 
                     Log.d("myLogs", creator);
-                    Log.d("myLogs", name);
+                    Log.d("myLogs", nameUser);
 
-                    if (Objects.equals(name, creator)){
+                    if (Objects.equals(nameUser, creator)){
                         binding.buttonClose.setEnabled(true);
                     }
 
@@ -123,33 +128,33 @@ public class ShowResult extends AppCompatActivity {
 
                     PieChart pieChart = (((PieChart) allEds.get(countQuestion - 1).findViewById(R.id.pieCharts)));
 
-                        answers.clear();
+                    answers.clear();
 
-                        for (DataSnapshot itemSnapshot : dataSnapshot.child(question).child("Answers").getChildren()) {
-                            String answer = itemSnapshot.child("answer").getValue(String.class);
-                            Integer quantity = itemSnapshot.child("quantity").getValue(Integer.class);
+                    for (DataSnapshot itemSnapshot : dataSnapshot.child(question).child("Answers").getChildren()) {
+                        String answer = itemSnapshot.child("answer").getValue(String.class);
+                        Integer quantity = itemSnapshot.child("quantity").getValue(Integer.class);
 
-                            if (quantity != 0)
-                                answers.add(new PieEntry(quantity, answer));
+                        if (quantity != 0)
+                            answers.add(new PieEntry(quantity, answer));
 
-                        }
-
-                        PieDataSet pieDataSet = new PieDataSet(answers, "Опрос");
-                        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-                        pieDataSet.setValueTextColor(Color.BLACK);
-                        pieDataSet.setValueTextSize(16f);
-
-                        PieData pieData = new PieData(pieDataSet);
-
-                        pieChart.setData(pieData);
-                        pieChart.getDescription().setEnabled(false);
-                        pieChart.setCenterText(_question);
-                        pieChart.animate();
-
-                        countQuestion++;
-                        question = "Question №" + countQuestion.toString();
                     }
+
+                    PieDataSet pieDataSet = new PieDataSet(answers, "Опрос");
+                    pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                    pieDataSet.setValueTextColor(Color.BLACK);
+                    pieDataSet.setValueTextSize(16f);
+
+                    PieData pieData = new PieData(pieDataSet);
+
+                    pieChart.setData(pieData);
+                    pieChart.getDescription().setEnabled(false);
+                    pieChart.setCenterText(_question);
+                    pieChart.animate();
+
+                    countQuestion++;
+                    question = "Question №" + countQuestion.toString();
                 }
+            }
 
 
             @Override
@@ -161,16 +166,18 @@ public class ShowResult extends AppCompatActivity {
         binding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShowResult.this, MainActivity.class);
-                intent.putExtra("name", name);
-                startActivity(intent);
+                MainFragment fragment = new MainFragment();
+
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.frameLayout, fragment);
+                ft.commit();
             }
         });
 
         binding.buttonClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ShowResult.this, R.style.AlertDialog);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialog);
 
                 builder
                         .setMessage("Вы уверены что хотите безвозвратно удалить данный опрос?\n")
@@ -182,13 +189,18 @@ public class ShowResult extends AppCompatActivity {
                                 FirebaseDatabase.getInstance()
                                         .getReference("surveys")
                                         .child(describe).removeValue();
-                                Toast.makeText(ShowResult.this, "Успешно удалено", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Успешно удалено", Toast.LENGTH_SHORT).show();
 
-                                Intent intent = new Intent(ShowResult.this, MainActivity.class);
-                                intent.putExtra("name", name);
-                                startActivity(intent);
+                                MainFragment fragment = new MainFragment();
+                                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.frameLayout, fragment);
+                                ft.commit();
 
-                                finish();
+                                //Intent intent = new Intent(ShowResult.this, MainActivity.class);
+                                //intent.putExtra("name", nameUser);
+                                //startActivity(intent);
+
+                                //finish();
                             }
                         })
 
@@ -203,5 +215,7 @@ public class ShowResult extends AppCompatActivity {
                 alertDialog.show();
             }
         });
+
+        return view;
     }
 }

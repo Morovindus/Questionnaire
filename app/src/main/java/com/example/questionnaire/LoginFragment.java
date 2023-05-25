@@ -1,17 +1,21 @@
 package com.example.questionnaire;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.questionnaire.databinding.ActivityLoginBinding;
+import com.example.questionnaire.databinding.FragmentLoginBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,26 +23,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginFragment extends Fragment {
 
-    private static ActivityLoginBinding binding_login;
+    private static FragmentLoginBinding binding;
     EditText loginUsername, loginPassword;
     Button loginButton;
     TextView signupRedirectText;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        binding_login = ActivityLoginBinding.inflate(getLayoutInflater());
-        View view = binding_login.getRoot();
-        setContentView(view);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        loginUsername = binding_login.loginUsername;
-        loginPassword = binding_login.loginPassword;
-        signupRedirectText = binding_login.signupRedictText;
-        loginButton = binding_login.loginButton;
+        loginUsername = binding.loginUsername;
+        loginPassword = binding.loginPassword;
+        signupRedirectText = binding.signupRedictText;
+        loginButton = binding.loginButton;
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,10 +57,16 @@ public class LoginActivity extends AppCompatActivity {
         signupRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intent);
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                SignupFragment fragment = new SignupFragment();
+                ft.replace(R.id.frameLayout, fragment);
+                ft.commit();
+                //Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                //startActivity(intent);
             }
         });
+
+        return view;
     }
 
     public Boolean validateUsername(){
@@ -99,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (passwordFromDB.equals(userPassword)) {
                         loginUsername.setError(null);
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.putExtra("name", userUsername);
                         startActivity(intent);
                     } else {

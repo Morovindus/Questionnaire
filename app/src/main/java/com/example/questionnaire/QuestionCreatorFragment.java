@@ -1,13 +1,16 @@
 package com.example.questionnaire;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -15,32 +18,32 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.questionnaire.databinding.ActivityQuestionCreatorBinding;
+import com.example.questionnaire.databinding.FragmentQuestionCreatorBinding;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionCreator extends AppCompatActivity implements
+public class QuestionCreatorFragment extends Fragment implements
         CompoundButton.OnCheckedChangeListener{
+
     private List<View> allEds;
     private Integer counter = 0;
     private Integer questions = 0;
     private Integer counterQuestions = 1;
-    String title, name;
+    String title, nameUser;
     Boolean flagSelection = false;
-    private ActivityQuestionCreatorBinding binding;
+    private FragmentQuestionCreatorBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityQuestionCreatorBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        super.onCreate(savedInstanceState);
+
+        binding = FragmentQuestionCreatorBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         Button createButton = binding.createButton;
         Button deleteButton = binding.deleteButton;
@@ -51,9 +54,15 @@ public class QuestionCreator extends AppCompatActivity implements
         Switch switch_button = binding.switchButton;
         switch_button.setOnCheckedChangeListener(this);
 
-        Intent intent2 = getIntent();
-        title = intent2.getStringExtra("title");
-        name = intent2.getStringExtra("name");
+        nameUser = ((MainActivity)getActivity()).name;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            title = bundle.getString("title");
+        }
+
+        //Intent intent2 = getIntent();
+        //title = intent2.getStringExtra("title");
+        //name = intent2.getStringExtra("name");
 
         allEds = new ArrayList<View>();
 
@@ -71,7 +80,7 @@ public class QuestionCreator extends AppCompatActivity implements
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(QuestionCreator.this, R.style.AlertDialog);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialog);
 
                 builder
                         .setMessage("Вы уверены что хотите выйти?\n\nНесохраненные данные будут потеряны")
@@ -79,8 +88,8 @@ public class QuestionCreator extends AppCompatActivity implements
                         .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(QuestionCreator.this, MainActivity.class);
-                                intent.putExtra("name", name);
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                intent.putExtra("name", nameUser);
                                 startActivity(intent);
                             }
                         })
@@ -161,7 +170,7 @@ public class QuestionCreator extends AppCompatActivity implements
 
                         reference5.child("Answer №" + String.valueOf(i + 1)).setValue(helperAnswers);
                     }
-                    Toast.makeText(QuestionCreator.this, "Успешно сохранено", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Успешно сохранено", Toast.LENGTH_LONG).show();
                 } else
                     counterQuestions++;
 
@@ -220,10 +229,11 @@ public class QuestionCreator extends AppCompatActivity implements
                     reference5.child("Answer №" + String.valueOf(i+1)).setValue(helperAnswers);
                 }
 
-                Toast.makeText(QuestionCreator.this, "Успешно сохранено", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Успешно сохранено", Toast.LENGTH_LONG).show();
                 questions = 1;
             }
         });
+        return view;
     }
 
     public Boolean validateData(){
@@ -240,12 +250,11 @@ public class QuestionCreator extends AppCompatActivity implements
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!isChecked){
-            Toast.makeText(QuestionCreator.this, "Множественный", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Множественный", Toast.LENGTH_LONG).show();
             flagSelection = false;
         } else {
-            Toast.makeText(QuestionCreator.this, "Одиночный", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Одиночный", Toast.LENGTH_LONG).show();
             flagSelection = true;
         }
     }
-
 }

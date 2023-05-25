@@ -2,7 +2,7 @@ package com.example.questionnaire;
 
 import java.util.ArrayList;
 
-public class HelperClass2 {
+public class HelperQuiz {
 
     String describe, creator;
     ArrayList<String> users;
@@ -30,7 +30,7 @@ public class HelperClass2 {
     public void setDescribe(String describe) {
         this.describe = describe;
     }
-    public HelperClass2(String describe, ArrayList<String> users, String creator){
+    public HelperQuiz(String describe, ArrayList<String> users, String creator){
         this.describe = describe;
         this.users = users;
         this.creator = creator;

@@ -1,22 +1,20 @@
 package com.example.questionnaire;
 
-import static android.widget.AbsListView.CHOICE_MODE_SINGLE;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.questionnaire.databinding.ActivityAnswersBinding;
 import com.example.questionnaire.databinding.FooterBinding;
+import com.example.questionnaire.databinding.FragmentAnswersBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,32 +24,36 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class AnswersActivity extends AppCompatActivity {
+public class AnswersFragment extends Fragment {
+
     ArrayList<Answer> answers;
     ListView lvMain;
     FirebaseDatabase database;
-    String describe, question, name;
-    private ActivityAnswersBinding binding_answers;
+    String describe, question;
+    String nameUser;
+    private FragmentAnswersBinding binding;
     private static FooterBinding binding_footer;
     Integer countQuestion;
     Boolean flagSelection = false;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding_answers = ActivityAnswersBinding.inflate(getLayoutInflater());
-        binding_footer = FooterBinding.inflate(getLayoutInflater());
-        View view = binding_answers.getRoot();
-        setContentView(view);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        super.onCreate(savedInstanceState);
+
+        binding = FragmentAnswersBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        binding_footer = FooterBinding.inflate(getLayoutInflater());
 
         Button buttonNew = binding_footer.createButton;
         buttonNew.setText("Следующий вопрос");
 
-        Intent intent2 = getIntent();
-        describe = intent2.getStringExtra("describe");
-        name = intent2.getStringExtra("name");
+        nameUser = ((MainActivity)getActivity()).name;
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            describe = bundle.getString("describe");
+        }
 
         answers = new ArrayList<Answer>();
 
@@ -103,6 +105,7 @@ public class AnswersActivity extends AppCompatActivity {
             }
         });
 
+        return view;
     }
 
     public void checkQuestion(String _question){
@@ -116,12 +119,12 @@ public class AnswersActivity extends AppCompatActivity {
                 if (snapshot.child("describe").exists()) {
 
                     String post = snapshot.child("describe").getValue(String.class);
-                    binding_answers.question.setText(post);
+                    binding.question.setText(post);
 
                     answers = new ArrayList<Answer>();
-                    lvMain = binding_answers.lvMain;
-                    BoxAdapterAnswer adapter = new BoxAdapterAnswer(AnswersActivity.this, answers);;
-                    BoxAdapterAnswersSingle adapterSingle =  new BoxAdapterAnswersSingle(AnswersActivity.this, answers);
+                    lvMain = binding.lvMain;
+                    BoxAdapterAnswer adapter = new BoxAdapterAnswer(getActivity(), answers);;
+                    BoxAdapterAnswersSingle adapterSingle =  new BoxAdapterAnswersSingle(getActivity(), answers);
 
                     answers.clear();
                     for (DataSnapshot itemSnapshot: snapshot
@@ -157,10 +160,18 @@ public class AnswersActivity extends AppCompatActivity {
 
 
                 } else {
-                    Intent intent = new Intent(AnswersActivity.this, FinalActivity.class);
-                    intent.putExtra("name", name);
-                    intent.putExtra("describe", describe);
-                    startActivity(intent);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("describe", describe);
+                    final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    FinalFragment fragment = new FinalFragment();
+                    fragment.setArguments(bundle);
+                    ft.replace(R.id.frameLayout, fragment);
+                    ft.commit();
+
+                    //Intent intent = new Intent(getActivity(), FinalActivity.class);
+                    //intent.putExtra("name", nameUser);
+                    //intent.putExtra("describe", describe);
+                    //startActivity(intent);
                 }
             }
             @Override

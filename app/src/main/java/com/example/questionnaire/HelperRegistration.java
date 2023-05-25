@@ -1,9 +1,7 @@
 package com.example.questionnaire;
 
-public class HelperClass {
+public class HelperRegistration {
     String name, email, username, password;
-
-
     public String getName() {
         return name;
     }
@@ -36,7 +34,7 @@ public class HelperClass {
         this.password = password;
     }
 
-    public HelperClass(String name, String email, String username, String password) {
+    public HelperRegistration(String name, String email, String username, String password) {
         this.name = name;
         this.email = email;
         this.username = username;
