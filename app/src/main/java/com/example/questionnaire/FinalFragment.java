@@ -1,6 +1,5 @@
 package com.example.questionnaire;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,6 +32,9 @@ public class FinalFragment extends Fragment {
 
         binding = FragmentFinalBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         nameUser = ((MainActivity)getActivity()).name;
         Bundle bundle = this.getArguments();
@@ -72,15 +74,9 @@ public class FinalFragment extends Fragment {
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.frameLayout, fragment);
                 ft.commit();
-
-                //Intent intent = new Intent(FinalActivity.this, MainActivity.class);
-                //startActivity(intent);
-
-                //startActivityAfterCleanup(MainActivity.class);
             }
         });
 
         return view;
     }
-
 }

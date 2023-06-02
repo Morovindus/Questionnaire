@@ -22,8 +22,6 @@ public class BoxAdapter extends BaseAdapter {
         objects = surveys;
         lInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-
     @Override
     public int getCount() {
         return objects.size();
@@ -50,7 +48,7 @@ public class BoxAdapter extends BaseAdapter {
             binding.lineCard.setCardBackgroundColor(Color.rgb(255, 255, 0));
         } else
             binding.lineCard.setCardBackgroundColor(Color.rgb(134,146,247));
-        //binding.ivImage.setImageResource(p.image);
+
         return binding.getRoot();
     }
 

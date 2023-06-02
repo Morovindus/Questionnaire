@@ -1,6 +1,5 @@
 package com.example.questionnaire;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,10 +27,8 @@ import java.util.Objects;
 
 public class MainFragment extends Fragment {
 
-    ArrayList<Surveys> surveys;
     String nameUser;
     private FragmentMainBinding binding;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,6 +113,7 @@ public class MainFragment extends Fragment {
                         EndPoolFragment fragment = new EndPoolFragment();
                         fragment.setArguments(bundle);
                         ft.replace(R.id.frameLayout, fragment);
+
                     } else {
 
                         DetailFragment fragment = new DetailFragment();
@@ -134,9 +132,6 @@ public class MainFragment extends Fragment {
                     UploadFragment fragment = new UploadFragment();
                     ft.replace(R.id.frameLayout, fragment);
                     ft.commit();
-                    //Intent intent = new Intent(getActivity(), UploadActivity.class);
-                    //intent.putExtra("name", nameUser);
-                    //startActivity(intent);
                 }
             });
         return view;

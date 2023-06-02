@@ -2,13 +2,13 @@ package com.example.questionnaire;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.example.questionnaire.databinding.FragmentUploadBinding;
 import com.google.firebase.database.DatabaseReference;
@@ -20,9 +20,6 @@ public class UploadFragment extends Fragment {
 
     private static FragmentUploadBinding binding;
     Integer flag = 0;
-    String nameUser;
-    EditText uploadTopic;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,19 +28,21 @@ public class UploadFragment extends Fragment {
         binding = FragmentUploadBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        uploadTopic = binding.uploadTopic;
-        nameUser = ((MainActivity)getActivity()).name;
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        String nameUser = ((MainActivity)getActivity()).name;
 
         binding.enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                saveData();
+                saveData(nameUser);
                 if (flag == 1)
                     return;
 
                 Bundle bundle = new Bundle();
-                bundle.putString("title", uploadTopic.getText().toString());
+                bundle.putString("title", binding.uploadTopic.getText().toString());
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
                 QuestionCreatorFragment fragment = new QuestionCreatorFragment();
                 fragment.setArguments(bundle);
@@ -55,9 +54,9 @@ public class UploadFragment extends Fragment {
         return view;
     }
 
-    public void saveData(){
+    public void saveData(String nameUser){
 
-        String title = uploadTopic.getText().toString();
+        String title = binding.uploadTopic.getText().toString();
 
         if (!validateData())
             return;
@@ -75,13 +74,13 @@ public class UploadFragment extends Fragment {
     }
 
     public Boolean validateData(){
-        String val = uploadTopic.getText().toString();
+        String val = binding.uploadTopic.getText().toString();
         if (val.isEmpty()){
-            uploadTopic.setError("Введите название опроса");
+            binding.uploadTopic.setError("Введите название опроса");
             flag = 1;
             return false;
         } else {
-            uploadTopic.setError(null);
+            binding.uploadTopic.setError(null);
             flag = 0;
             return true;
         }

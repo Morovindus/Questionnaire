@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.questionnaire.databinding.ActivitySignupBinding;
-
-
 public class SignupActivity extends AppCompatActivity {
 
     SignupFragment signupFragment;

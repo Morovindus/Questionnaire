@@ -2,6 +2,7 @@ package com.example.questionnaire;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -24,16 +25,8 @@ public class ReferenceFragment extends Fragment {
         binding = FragmentReferenceBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        binding.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragment fragment = new MainFragment();
-
-                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.frameLayout, fragment);
-                ft.commit();
-            }
-        });
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         return view;
     }

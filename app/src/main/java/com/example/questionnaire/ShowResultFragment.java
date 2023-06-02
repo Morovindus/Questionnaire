@@ -2,10 +2,13 @@ package com.example.questionnaire;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -49,6 +52,9 @@ public class ShowResultFragment extends Fragment {
         binding = FragmentShowResultBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         nameUser = ((MainActivity)getActivity()).name;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -75,10 +81,13 @@ public class ShowResultFragment extends Fragment {
                         if (Objects.equals(w, nameUser)){
                             flag = true;
                             binding.buttonClose.setEnabled(true);
+
+                            binding.buttonClose.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_close_24, null));
+
                         }
                     }
                     if (!flag){
-                        binding.buttonClose.setBackgroundColor(Color.rgb(255,255,255));
+                        binding.buttonClose.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_close_24_white, null));
                     }
                 }
             }
@@ -112,6 +121,9 @@ public class ShowResultFragment extends Fragment {
 
                     if (Objects.equals(nameUser, creator)){
                         binding.buttonClose.setEnabled(true);
+                        binding.buttonClose.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_close_24, null));
+                    } else{
+                        binding.buttonClose.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_close_24_white, null));
                     }
 
                     String _question = dataSnapshot.child(question).child("describe").getValue(String.class);
@@ -163,17 +175,6 @@ public class ShowResultFragment extends Fragment {
             }
         });
 
-        binding.buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragment fragment = new MainFragment();
-
-                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.frameLayout, fragment);
-                ft.commit();
-            }
-        });
-
         binding.buttonClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,12 +196,6 @@ public class ShowResultFragment extends Fragment {
                                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
                                 ft.replace(R.id.frameLayout, fragment);
                                 ft.commit();
-
-                                //Intent intent = new Intent(ShowResult.this, MainActivity.class);
-                                //intent.putExtra("name", nameUser);
-                                //startActivity(intent);
-
-                                //finish();
                             }
                         })
 

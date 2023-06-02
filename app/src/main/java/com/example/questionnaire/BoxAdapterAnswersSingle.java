@@ -5,11 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
-import com.example.questionnaire.databinding.ItemAnswersBinding;
 import com.example.questionnaire.databinding.ItemAnswersSingleBinding;
 
 import java.util.ArrayList;
@@ -47,7 +44,6 @@ public class BoxAdapterAnswersSingle extends BaseAdapter {
         binding.tvDescribe.setText(p.answer.toString());
 
         RadioButton rbSelect = binding.cbBox;
-
 
         if(selectedIndex == position){
             rbSelect.setChecked(true);

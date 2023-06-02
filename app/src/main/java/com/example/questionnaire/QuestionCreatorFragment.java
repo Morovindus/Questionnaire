@@ -45,6 +45,9 @@ public class QuestionCreatorFragment extends Fragment implements
         binding = FragmentQuestionCreatorBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         Button createButton = binding.createButton;
         Button deleteButton = binding.deleteButton;
         Button newButton = binding.buttonNew;
@@ -59,10 +62,6 @@ public class QuestionCreatorFragment extends Fragment implements
         if (bundle != null) {
             title = bundle.getString("title");
         }
-
-        //Intent intent2 = getIntent();
-        //title = intent2.getStringExtra("title");
-        //name = intent2.getStringExtra("name");
 
         allEds = new ArrayList<View>();
 

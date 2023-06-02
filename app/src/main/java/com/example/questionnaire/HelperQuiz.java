@@ -3,14 +3,12 @@ package com.example.questionnaire;
 import java.util.ArrayList;
 
 public class HelperQuiz {
-
     String describe, creator;
     ArrayList<String> users;
 
     public String getCreator() {
         return creator;
     }
-
     public void setCreator(String creator) {
         this.creator = creator;
     }

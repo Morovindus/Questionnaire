@@ -13,13 +13,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.questionnaire.databinding.ActivityMainBinding;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     String name;
     MainFragment mainFragment;
     EndPoolFragment endFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,19 +31,15 @@ public class MainActivity extends AppCompatActivity {
         mainFragment = new MainFragment();
         endFragment = new EndPoolFragment();
         setNewFragment(mainFragment);
-
     }
 
+
+    // Метод установки основгого фрагмента
     public void setNewFragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayout, fragment);
         ActionBar actionBar = getSupportActionBar();
-        //if (fragment != mainFragment || fragment != endFragment) {
-        //    actionBar.setDisplayHomeAsUpEnabled(true);
-        //} else {
-        //    actionBar.setDisplayHomeAsUpEnabled(false);
-        //}
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         ft.commit();
     }
 

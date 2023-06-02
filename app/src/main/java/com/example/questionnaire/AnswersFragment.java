@@ -3,6 +3,7 @@ package com.example.questionnaire;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class AnswersFragment extends Fragment {
-
     ArrayList<Answer> answers;
     ListView lvMain;
     FirebaseDatabase database;
@@ -43,6 +43,9 @@ public class AnswersFragment extends Fragment {
 
         binding = FragmentAnswersBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         binding_footer = FooterBinding.inflate(getLayoutInflater());
 
@@ -167,11 +170,6 @@ public class AnswersFragment extends Fragment {
                     fragment.setArguments(bundle);
                     ft.replace(R.id.frameLayout, fragment);
                     ft.commit();
-
-                    //Intent intent = new Intent(getActivity(), FinalActivity.class);
-                    //intent.putExtra("name", nameUser);
-                    //intent.putExtra("describe", describe);
-                    //startActivity(intent);
                 }
             }
             @Override

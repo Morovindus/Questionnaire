@@ -22,7 +22,6 @@ public class BoxAdapterAnswer extends BaseAdapter {
         lInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
     @Override
     public int getCount() {
         return objects.size();
@@ -51,7 +50,6 @@ public class BoxAdapterAnswer extends BaseAdapter {
         cbBuy.setChecked(p.box);
         return binding.getRoot();
     }
-
     Answer getAnswer(int position){
         return ((Answer) getItem(position));
     }

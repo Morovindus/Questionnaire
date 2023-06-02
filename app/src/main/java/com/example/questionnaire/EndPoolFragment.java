@@ -1,6 +1,8 @@
 package com.example.questionnaire;
 
 import android.os.Bundle;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -22,6 +24,9 @@ public class EndPoolFragment extends Fragment {
 
         binding = FragmentEndPoolBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         nameUser = ((MainActivity)getActivity()).name;
         Bundle bundle = this.getArguments();

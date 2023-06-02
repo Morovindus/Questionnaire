@@ -40,5 +40,4 @@ public class HelperRegistration {
         this.username = username;
         this.password = password;
     }
-
 }
