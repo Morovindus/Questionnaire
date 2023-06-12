@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.questionnaire.databinding.FragmentAuthorBinding;
 
+// Фрагмент демонстрирующий информацию об авторе
 public class AuthorFragment extends Fragment {
     private FragmentAuthorBinding binding;
     @Override

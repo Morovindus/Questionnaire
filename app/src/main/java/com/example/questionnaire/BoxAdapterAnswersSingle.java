@@ -11,6 +11,7 @@ import com.example.questionnaire.databinding.ItemAnswersSingleBinding;
 
 import java.util.ArrayList;
 
+// Адаптер, который выводит список ответов, с одиночным выбором
 public class BoxAdapterAnswersSingle extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;

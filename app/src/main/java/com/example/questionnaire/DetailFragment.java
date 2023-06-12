@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.questionnaire.databinding.FragmentDetailBinding;
 
+// Фрагмент, который оповещает пользователя о намерении пройти опрос
 public class DetailFragment extends Fragment {
 
     private FragmentDetailBinding binding;
@@ -41,6 +42,7 @@ public class DetailFragment extends Fragment {
 
         detailDesc.setText(describe);
 
+        // Обработчик нажатия кнопки вперед
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

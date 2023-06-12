@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.questionnaire.databinding.ActivitySignupBinding;
+// Активити, ответственное за регистрацию и авторизацию
 public class SignupActivity extends AppCompatActivity {
 
     SignupFragment signupFragment;
@@ -24,6 +25,7 @@ public class SignupActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        // Изначально установим фрагмент регистрации
         signupFragment = new SignupFragment();
         setNewFragment(signupFragment);
     }

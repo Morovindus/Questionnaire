@@ -25,12 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+// Класс, блягодаря которому пользователь, вносит ответы
 public class AnswersFragment extends Fragment {
     ArrayList<Answer> answers;
     ListView lvMain;
     FirebaseDatabase database;
     String describe, question;
-    String nameUser;
     private FragmentAnswersBinding binding;
     private static FooterBinding binding_footer;
     Integer countQuestion;
@@ -52,7 +52,6 @@ public class AnswersFragment extends Fragment {
         Button buttonNew = binding_footer.createButton;
         buttonNew.setText("Следующий вопрос");
 
-        nameUser = ((MainActivity)getActivity()).name;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             describe = bundle.getString("describe");
@@ -65,6 +64,7 @@ public class AnswersFragment extends Fragment {
 
         checkQuestion(question);
 
+        // Слушатель кнопки добавление нового вопроса
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +111,7 @@ public class AnswersFragment extends Fragment {
         return view;
     }
 
+    // Проверка что в базе данных есть еще один вопрос
     public void checkQuestion(String _question){
 
         Query checkUserDatabase = FirebaseDatabase.getInstance().getReference("surveys")

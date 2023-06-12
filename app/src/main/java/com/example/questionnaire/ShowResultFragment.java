@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+// Фрагмент, который демонстрирует результаты опроса
 public class ShowResultFragment extends Fragment {
 
     private FragmentShowResultBinding binding;
@@ -106,6 +107,7 @@ public class ShowResultFragment extends Fragment {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("surveys").child(describe);
 
+        // Считываем данные из БД, и рисуем диаграммы
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,9 +117,6 @@ public class ShowResultFragment extends Fragment {
                     ArrayList<PieEntry> answers = new ArrayList<>();
 
                     String creator = dataSnapshot.child("creator").getValue(String.class);
-
-                    Log.d("myLogs", creator);
-                    Log.d("myLogs", nameUser);
 
                     if (Objects.equals(nameUser, creator)){
                         binding.buttonClose.setEnabled(true);
@@ -175,6 +174,7 @@ public class ShowResultFragment extends Fragment {
             }
         });
 
+        // Слушатель кнопки, удаляющией опрос
         binding.buttonClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.questionnaire.databinding.FragmentEndPoolBinding;
 
+// Фрагмент, который уведомляет пользователя о намерении просмотра результатов
 public class EndPoolFragment extends Fragment {
 
     private FragmentEndPoolBinding binding;
@@ -33,6 +34,8 @@ public class EndPoolFragment extends Fragment {
         if (bundle != null) {
             describe = bundle.getString("describe");
         }
+
+        // Обработчик нажатия кнопки, который переносит пользователя на фрагмент с результатами
         binding.buttonResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

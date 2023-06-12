@@ -19,7 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
 
+
+// Фрагмент регистрации пользователя
 public class SignupFragment extends Fragment {
 
     private static FragmentSignupBinding binding;
@@ -30,6 +33,7 @@ public class SignupFragment extends Fragment {
 
         binding = FragmentSignupBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        // Обработчик нажатия на кнопку регистрации
         binding.signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,12 +45,16 @@ public class SignupFragment extends Fragment {
 
                 if (!validateUsername(username) | !validatePassword(password) | !validateName(name) | !validateEmail(email)){
                 } else{
-                    checkUser(username, email, name, password);
+                    try {
+                        checkUser(username, email, name, password);
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
 
-
+        // Обработчик нажатия текстовое поле, переводящее пользователя на экран входа
         binding.loginRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +68,9 @@ public class SignupFragment extends Fragment {
         return view;
     }
 
-    public void checkUser(String username, String email, String name, String password){
+    // Метод проверяющий достоверность введенной пользователем информации
+    public void checkUser(String username, String email, String name, String _password) throws UnsupportedEncodingException {
+        String password = Encode(_password);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
         Query checkUserDatabase = reference.orderByChild("username").equalTo(username);
@@ -91,6 +101,7 @@ public class SignupFragment extends Fragment {
         });
     }
 
+    // Проверка, что пользователь заполнил поле своего имени
     public Boolean validateName(String val){
         if (val.isEmpty()){
             binding.signupName.setError("Введите свое имя");
@@ -101,6 +112,7 @@ public class SignupFragment extends Fragment {
         }
     }
 
+    // Проверка, что пользователь заполнил поле электронной почты
     public Boolean validateEmail(String val){
         if (val.isEmpty()){
             binding.signupEmail.setError("Введите адрес электронной почты");
@@ -111,6 +123,7 @@ public class SignupFragment extends Fragment {
         }
     }
 
+    // Проверка, что пользователь заполнил поле логина
     public Boolean validateUsername(String val){
         if (val.isEmpty()){
             binding.signupUsername.setError("Введите имя пользователя");
@@ -121,6 +134,7 @@ public class SignupFragment extends Fragment {
         }
     }
 
+    // Проверка, что пользователь заполнил поле пароля
     public Boolean validatePassword(String val){
         if (val.isEmpty()){
             binding.signupPassword.setError("Введите пароль");
@@ -129,5 +143,16 @@ public class SignupFragment extends Fragment {
             binding.signupPassword.setError(null);
             return true;
         }
+    }
+
+    private static String Encode(String s) throws UnsupportedEncodingException {
+        byte[] bytes = s.getBytes("UTF-8");
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%s0x", b));
+        }
+
+        return sb.toString();
     }
 }

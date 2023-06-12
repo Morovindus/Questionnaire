@@ -1,5 +1,6 @@
 package com.example.questionnaire;
 
+// Класс, благодаря которому заполняются поля в БД связанные с регистрационными данными
 public class HelperRegistration {
     String name, email, username, password;
     public String getName() {
@@ -34,6 +35,7 @@ public class HelperRegistration {
         this.password = password;
     }
 
+    // Конструктор класс, инициализирующий поля
     public HelperRegistration(String name, String email, String username, String password) {
         this.name = name;
         this.email = email;

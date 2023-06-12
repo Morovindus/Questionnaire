@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.questionnaire.databinding.FragmentInstructionBinding;
 
+// Фрагмент демонстрирующий руководство пользования
 public class InstructionFragment extends Fragment {
     private FragmentInstructionBinding binding;
     @Override
@@ -24,7 +25,6 @@ public class InstructionFragment extends Fragment {
 
         ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
 
         return view;
     }

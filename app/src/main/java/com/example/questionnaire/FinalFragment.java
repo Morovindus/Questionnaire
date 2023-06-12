@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+// Фрагмент, который уведомляет пользователя о завершении опроса
 public class FinalFragment extends Fragment {
 
     String nameUser, describe;
@@ -42,6 +43,8 @@ public class FinalFragment extends Fragment {
             describe = bundle.getString("describe");
         }
 
+        // Обработчик нажатия кнопки, который сохраняет полученный результат
+        // и возвращает на главный экран
         binding.buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

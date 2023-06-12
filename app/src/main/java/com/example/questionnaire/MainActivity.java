@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.questionnaire.databinding.ActivityMainBinding;
 
+// Главный экран приложения
 public class MainActivity extends AppCompatActivity {
     String name;
     MainFragment mainFragment;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // Метод установки основгого фрагмента
+    // Метод установки основного фрагмента
     public void setNewFragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayout, fragment);
@@ -43,12 +44,14 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
+    // Метод, в котором указывается файл разметки меню
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+    // Метод, который обрабатывает нажатия на кнопки меню
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;

@@ -2,17 +2,16 @@ package com.example.questionnaire;
 
 import java.util.ArrayList;
 
+// Класс, благодаря которому заполняются поля в БД связанные с опросами
 public class HelperQuiz {
     String describe, creator;
     ArrayList<String> users;
-
     public String getCreator() {
         return creator;
     }
     public void setCreator(String creator) {
         this.creator = creator;
     }
-
     public ArrayList<String> getUsers() {
         return users;
     }
@@ -28,6 +27,8 @@ public class HelperQuiz {
     public void setDescribe(String describe) {
         this.describe = describe;
     }
+
+    // Конструктор класс, инициализирующий поля
     public HelperQuiz(String describe, ArrayList<String> users, String creator){
         this.describe = describe;
         this.users = users;

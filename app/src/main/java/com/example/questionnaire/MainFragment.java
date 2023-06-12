@@ -3,7 +3,6 @@ package com.example.questionnaire;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Objects;
 
+// Основной фрагмент, в котором расположен список со всеми опросами
 public class MainFragment extends Fragment {
 
     String nameUser;
@@ -51,6 +51,7 @@ public class MainFragment extends Fragment {
 
         BoxAdapter adapter = new BoxAdapter(getActivity(), surveys);
 
+        // Получаем значения полей опросов и составляем список
         ValueEventListener eventListener = reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -97,6 +98,7 @@ public class MainFragment extends Fragment {
 
             lvMain.setAdapter(adapter);
 
+            // Слушатель нажатия на список
             lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -124,6 +126,7 @@ public class MainFragment extends Fragment {
                 }
             });
 
+            // Обработчик нажатия на кнопку "Создать новый опрос"
             createButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

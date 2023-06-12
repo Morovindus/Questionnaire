@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+// Фрагмент в котором пользователь создает вопросы
 public class QuestionCreatorFragment extends Fragment implements
         CompoundButton.OnCheckedChangeListener{
 
@@ -57,6 +58,7 @@ public class QuestionCreatorFragment extends Fragment implements
         Switch switch_button = binding.switchButton;
         switch_button.setOnCheckedChangeListener(this);
 
+        // Получаем значение логина пользователя
         nameUser = ((MainActivity)getActivity()).name;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -76,6 +78,7 @@ public class QuestionCreatorFragment extends Fragment implements
             linear.addView(view2);
         }
 
+        // Обработчик нажатия на кнопку выхода
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +108,7 @@ public class QuestionCreatorFragment extends Fragment implements
             }
         });
 
+        // Обработчик нажатия на кнопку, добавления нового ответа
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +121,7 @@ public class QuestionCreatorFragment extends Fragment implements
             }
         });
 
+        // Обработчик нажатия на кнопку, удаления нового ответа
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,6 +136,8 @@ public class QuestionCreatorFragment extends Fragment implements
                 }
             }
         });
+
+        // Обработчик нажатия на кнопку, создания нового вопроса
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,6 +198,7 @@ public class QuestionCreatorFragment extends Fragment implements
             }
         });
 
+        // Обработчик нажатия на кнопку сохранения
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,6 +243,7 @@ public class QuestionCreatorFragment extends Fragment implements
         return view;
     }
 
+    // Проверка, что пользователь заполнил поле вопроса
     public Boolean validateData(){
         String val = binding.question.getText().toString();
         if (val.isEmpty()){
@@ -246,6 +255,7 @@ public class QuestionCreatorFragment extends Fragment implements
         }
     }
 
+    // Обработчик нажатия на переключатель
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!isChecked){

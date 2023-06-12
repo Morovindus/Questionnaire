@@ -13,6 +13,7 @@ import com.example.questionnaire.databinding.ItemBinding;
 
 import java.util.ArrayList;
 
+// Адаптер, который позволяет вывести список всех опросов на экран
 public class BoxAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;

@@ -12,6 +12,7 @@ import com.example.questionnaire.databinding.ItemAnswersBinding;
 
 import java.util.ArrayList;
 
+// Адаптер, который выводит список ответов, с множественным выбором
 public class BoxAdapterAnswer extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;

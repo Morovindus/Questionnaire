@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.questionnaire.databinding.FragmentReferenceBinding;
 
+// Фрагмент демонстрирующий информацию о приложении
 public class ReferenceFragment extends Fragment {
 
     private FragmentReferenceBinding binding;

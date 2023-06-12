@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+// Фрагмент, на котором пользователь вводит название опроса
 public class UploadFragment extends Fragment {
 
     private static FragmentUploadBinding binding;
@@ -33,6 +34,7 @@ public class UploadFragment extends Fragment {
 
         String nameUser = ((MainActivity)getActivity()).name;
 
+        // Обработчик нажатия на кнопку ввода
         binding.enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +56,7 @@ public class UploadFragment extends Fragment {
         return view;
     }
 
+    // Метод сохранения названия опроса
     public void saveData(String nameUser){
 
         String title = binding.uploadTopic.getText().toString();
@@ -73,6 +76,7 @@ public class UploadFragment extends Fragment {
 
     }
 
+    // Проверка, что пользователь заполнил поле названия опроса
     public Boolean validateData(){
         String val = binding.uploadTopic.getText().toString();
         if (val.isEmpty()){

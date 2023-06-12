@@ -1,5 +1,6 @@
 package com.example.questionnaire;
 
+// Класс структуры опроса
 public class Surveys {
     String describe;
     Integer check;
@@ -16,6 +17,7 @@ public class Surveys {
         this.check = check;
     }
 
+    // Конструктор класса, инициализирующий поля
     public Surveys(String describe, Integer check) {
         this.describe = describe;
         this.check = check;
