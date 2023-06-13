@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,6 @@ import com.example.questionnaire.databinding.FooterBinding;
 import com.example.questionnaire.databinding.FragmentAnswersBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -28,13 +28,12 @@ import java.util.ArrayList;
 // Класс, блягодаря которому пользователь, вносит ответы
 public class AnswersFragment extends Fragment {
     ArrayList<Answer> answers;
-    ListView lvMain;
-    FirebaseDatabase database;
     String describe, question;
     private FragmentAnswersBinding binding;
     private static FooterBinding binding_footer;
     Integer countQuestion;
     Boolean flagSelection = false;
+    ArrayList<String> _answers;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,6 +42,8 @@ public class AnswersFragment extends Fragment {
 
         binding = FragmentAnswersBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        _answers = new ArrayList<>();
 
         ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -64,44 +65,21 @@ public class AnswersFragment extends Fragment {
 
         checkQuestion(question);
 
+
         // Слушатель кнопки добавление нового вопроса
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Integer> ready_answers = new ArrayList<Integer>();
+                String answer = "";
                 for (Answer p : answers) {
-                    if (p.box)
-                        ready_answers.add(1);
-                    else
-                        ready_answers.add(0);
-                }
-
-                for (Integer i = 1;i <= ready_answers.size();i++){
-                    if (ready_answers.get(i-1) == 1){
-
-                        database = FirebaseDatabase.getInstance();
-                        DatabaseReference reference2 = database.getReference("surveys")
-                                .child(describe)
-                                .child(question)
-                                .child("Answers")
-                                .child("Answer №" + i.toString())
-                                .child("quantity");
-
-                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Integer count = snapshot.getValue(Integer.class);
-                                reference2.setValue(count+1);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
+                    if (p.box) {
+                        answer += "1";
+                    }
+                    else {
+                        answer += "0";
                     }
                 }
-
+                _answers.add(answer);
                 countQuestion++;
                 question = "Question №" + countQuestion.toString();
                 checkQuestion(question);
@@ -126,7 +104,8 @@ public class AnswersFragment extends Fragment {
                     binding.question.setText(post);
 
                     answers = new ArrayList<Answer>();
-                    lvMain = binding.lvMain;
+
+                    ListView lvMain = binding.lvMain;
                     BoxAdapterAnswer adapter = new BoxAdapterAnswer(getActivity(), answers);;
                     BoxAdapterAnswersSingle adapterSingle =  new BoxAdapterAnswersSingle(getActivity(), answers);
 
@@ -166,6 +145,7 @@ public class AnswersFragment extends Fragment {
                 } else {
                     Bundle bundle = new Bundle();
                     bundle.putString("describe", describe);
+                    bundle.putStringArrayList("answers", _answers);
                     final FragmentTransaction ft = getFragmentManager().beginTransaction();
                     FinalFragment fragment = new FinalFragment();
                     fragment.setArguments(bundle);

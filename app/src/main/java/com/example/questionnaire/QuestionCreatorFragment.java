@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +29,12 @@ import java.util.List;
 // Фрагмент в котором пользователь создает вопросы
 public class QuestionCreatorFragment extends Fragment implements
         CompoundButton.OnCheckedChangeListener{
-
     private List<View> allEds;
     private Integer counter = 0;
-    private Integer questions = 0;
-    private Integer counterQuestions = 1;
     String title, nameUser;
     Boolean flagSelection = false;
     private FragmentQuestionCreatorBinding binding;
-
+    Quiz quiz;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,17 +44,11 @@ public class QuestionCreatorFragment extends Fragment implements
         binding = FragmentQuestionCreatorBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        quiz = new Quiz();
 
-        Button createButton = binding.createButton;
-        Button deleteButton = binding.deleteButton;
-        Button newButton = binding.buttonNew;
-        Button exitButton = binding.buttonExit;
-        Button saveButton = binding.buttonSave;
+        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Switch switch_button = binding.switchButton;
-        switch_button.setOnCheckedChangeListener(this);
+        binding.switchButton.setOnCheckedChangeListener(this);
 
         // Получаем значение логина пользователя
         nameUser = ((MainActivity)getActivity()).name;
@@ -79,7 +71,7 @@ public class QuestionCreatorFragment extends Fragment implements
         }
 
         // Обработчик нажатия на кнопку выхода
-        exitButton.setOnClickListener(new View.OnClickListener() {
+        binding.buttonExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialog);
@@ -109,7 +101,7 @@ public class QuestionCreatorFragment extends Fragment implements
         });
 
         // Обработчик нажатия на кнопку, добавления нового ответа
-        createButton.setOnClickListener(new View.OnClickListener() {
+        binding.createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 counter++;
@@ -122,7 +114,7 @@ public class QuestionCreatorFragment extends Fragment implements
         });
 
         // Обработчик нажатия на кнопку, удаления нового ответа
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        binding.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (counter > 2) {
@@ -138,49 +130,26 @@ public class QuestionCreatorFragment extends Fragment implements
         });
 
         // Обработчик нажатия на кнопку, создания нового вопроса
-        newButton.setOnClickListener(new View.OnClickListener() {
+        binding.buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer flag = 0;
-                String[] items = new String[allEds.size()];
-                if (questions == 0) {
-                    for (int i = 0; i < allEds.size(); i++) {
-                        if (((EditText) allEds.get(i).findViewById(R.id.editText)).getText().toString().isEmpty()) {
-                            ((EditText) allEds.get(i).findViewById(R.id.editText)).setError("Введите ответ");
-                            flag = 1;
-                        }
-                        items[i] = ((EditText) allEds.get(i).findViewById(R.id.editText)).getText().toString();
-                    }
 
-                    if (!validateData())
-                        return;
-                    if (flag == 1)
-                        return;
+                int[] flag = new int[1];
+                String [] items = checkItems(flag);
 
-                    String question = "Question №" + counterQuestions;
-                    counterQuestions++;
+                if (!validateData())
+                    return;
+                if (flag[0] == 1)
+                    return;
 
-                    HelperQuestion helperQuestion = new HelperQuestion(binding.question.getText().toString(), flagSelection);
+                quiz.flagSelection.add(flagSelection);
+                quiz.nameQuestion.add(binding.question.getText().toString());
 
-                    DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("surveys").child(title);
+                for (int i = 0;i < counter;i++) {
+                    quiz.answers.add(items[i]);
+                }
+                quiz.countAnswers.add(counter);
 
-                    reference3.child(question).setValue(helperQuestion);
-
-                    for (int i = 0; i < counter; i++) {
-                        HelperAnswers helperAnswers = new HelperAnswers(items[i], 0);
-
-                        DatabaseReference reference5 = FirebaseDatabase.getInstance().getReference("surveys")
-                                .child(title)
-                                .child(question)
-                                .child("Answers");
-
-                        reference5.child("Answer №" + String.valueOf(i + 1)).setValue(helperAnswers);
-                    }
-                    Toast.makeText(getActivity(), "Успешно сохранено", Toast.LENGTH_LONG).show();
-                } else
-                    counterQuestions++;
-
-                questions = 0;
                 binding.question.setText("");
                 linear.removeAllViews();
                 allEds.clear();
@@ -199,48 +168,79 @@ public class QuestionCreatorFragment extends Fragment implements
         });
 
         // Обработчик нажатия на кнопку сохранения
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        binding.buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer flag = 0;
-                String [] items = new String[allEds.size()];
-                for(int i=0; i < allEds.size(); i++) {
-                    if (((EditText) allEds.get(i).findViewById(R.id.editText)).getText().toString().isEmpty()) {
-                        ((EditText) allEds.get(i).findViewById(R.id.editText)).setError("Введите ответ");
-                        flag = 1;
-                    }
-                    items[i] = ((EditText) allEds.get(i).findViewById(R.id.editText)).getText().toString();
-                }
+                int [] flag = new int[1];
+                String [] items = checkItems(flag);
 
                 if (!validateData())
                     return;
-                if (flag == 1)
+                if (flag[0] == 1)
                     return;
 
-                String question = "Question №" + counterQuestions;
-
-                HelperQuestion helperQuestion = new HelperQuestion(binding.question.getText().toString(), flagSelection);
-
-                DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("surveys").child(title);
-
-                reference3.child(question).setValue(helperQuestion);
+                quiz.flagSelection.add(flagSelection);
+                quiz.nameQuestion.add(binding.question.getText().toString());
 
                 for (int i = 0;i < counter;i++) {
-                    HelperAnswers helperAnswers = new HelperAnswers(items[i], 0);
+                    quiz.answers.add(items[i]);
+                }
+                quiz.countAnswers.add(counter);
 
-                    DatabaseReference reference5 = FirebaseDatabase.getInstance().getReference("surveys")
-                            .child(title)
-                            .child(question)
-                            .child("Answers");
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference reference = database.getReference("surveys");
+                ArrayList<String> users = new ArrayList<String>();
+                users.add("0");
+                HelperQuiz helperClass = new HelperQuiz(title, users, nameUser);
+                reference.child(title).setValue(helperClass);
 
-                    reference5.child("Answer №" + String.valueOf(i+1)).setValue(helperAnswers);
+                int i = 0;
+                int _counter = 0;
+
+                for (String _question : quiz.nameQuestion) {
+                    String question = "Question №" + String.valueOf(i+1);
+                    HelperQuestion helperQuestion = new HelperQuestion(_question, quiz.flagSelection.get(i));
+                    DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("surveys").child(title);
+                    reference3.child(question).setValue(helperQuestion);
+
+
+                    for (int j = 0; j < quiz.countAnswers.get(i); j++) {
+                        HelperAnswers helperAnswers = new HelperAnswers(quiz.answers.get(_counter), 0);
+                        DatabaseReference reference5 = FirebaseDatabase.getInstance().getReference("surveys")
+                                .child(title)
+                                .child(question)
+                                .child("Answers");
+
+                        reference5.child("Answer №" + String.valueOf(j+1)).setValue(helperAnswers);
+
+                        Log.d("myLogs", "Название ответ " + quiz.answers.get(_counter));
+                        _counter++;
+                    }
+                    i++;
                 }
 
+
                 Toast.makeText(getActivity(), "Успешно сохранено", Toast.LENGTH_LONG).show();
-                questions = 1;
             }
         });
         return view;
+    }
+
+    // Проверка, что пользователь заполнил все поля ответов
+    public String[] checkItems(int [] flag){
+
+        String [] items = new String[allEds.size()];
+
+        for(int i=0; i < allEds.size(); i++) {
+            if (((EditText) allEds.get(i).findViewById(R.id.editText)).getText().toString().isEmpty()) {
+                ((EditText) allEds.get(i).findViewById(R.id.editText)).setError("Введите ответ");
+                flag[0] = 1;
+            }
+            items[i] = ((EditText) allEds.get(i).findViewById(R.id.editText)).getText().toString();
+        }
+
+        return items;
+
     }
 
     // Проверка, что пользователь заполнил поле вопроса

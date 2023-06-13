@@ -15,9 +15,7 @@ import com.example.questionnaire.databinding.ActivityMainBinding;
 
 // Главный экран приложения
 public class MainActivity extends AppCompatActivity {
-    String name;
-    MainFragment mainFragment;
-    EndPoolFragment endFragment;
+    public String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent2 = getIntent();
         name = intent2.getStringExtra("name");
 
-        mainFragment = new MainFragment();
-        endFragment = new EndPoolFragment();
+        MainFragment mainFragment = new MainFragment();
         setNewFragment(mainFragment);
     }
 
@@ -74,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(MainActivity.this, SignupActivity.class);
             startActivity(intent);
         } else if (id == android.R.id.home){
+            MainFragment mainFragment = new MainFragment();
             setNewFragment(mainFragment);
         }
 

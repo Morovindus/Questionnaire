@@ -1,6 +1,5 @@
 package com.example.questionnaire;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -12,8 +11,6 @@ import com.example.questionnaire.databinding.ActivitySignupBinding;
 // Активити, ответственное за регистрацию и авторизацию
 public class SignupActivity extends AppCompatActivity {
 
-    SignupFragment signupFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +19,10 @@ public class SignupActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        getSupportActionBar().hide();
 
         // Изначально установим фрагмент регистрации
-        signupFragment = new SignupFragment();
+        SignupFragment signupFragment = new SignupFragment();
         setNewFragment(signupFragment);
     }
 

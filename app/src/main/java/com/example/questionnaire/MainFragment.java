@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.questionnaire.databinding.FooterBinding;
@@ -26,9 +25,7 @@ import java.util.Objects;
 
 // Основной фрагмент, в котором расположен список со всеми опросами
 public class MainFragment extends Fragment {
-
     String nameUser;
-    private FragmentMainBinding binding;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,14 +33,12 @@ public class MainFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        binding = FragmentMainBinding.inflate(inflater, container, false);
+        FragmentMainBinding binding = FragmentMainBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         FooterBinding binding_footer = FooterBinding.inflate(getLayoutInflater());
 
         nameUser = ((MainActivity)getActivity()).name;
-
-        Button createButton = binding_footer.createButton;
 
         surveys = new ArrayList<Surveys>();
 
@@ -127,7 +122,7 @@ public class MainFragment extends Fragment {
             });
 
             // Обработчик нажатия на кнопку "Создать новый опрос"
-            createButton.setOnClickListener(new View.OnClickListener() {
+            binding_footer.createButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 

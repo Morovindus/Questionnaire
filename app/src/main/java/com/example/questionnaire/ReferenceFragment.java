@@ -2,9 +2,7 @@ package com.example.questionnaire;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +13,16 @@ import com.example.questionnaire.databinding.FragmentReferenceBinding;
 // Фрагмент демонстрирующий информацию о приложении
 public class ReferenceFragment extends Fragment {
 
-    private FragmentReferenceBinding binding;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        binding = FragmentReferenceBinding.inflate(inflater, container, false);
+        FragmentReferenceBinding binding = FragmentReferenceBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         return view;
     }

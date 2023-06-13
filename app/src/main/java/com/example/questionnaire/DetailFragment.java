@@ -2,7 +2,6 @@ package com.example.questionnaire;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -17,22 +16,19 @@ import com.example.questionnaire.databinding.FragmentDetailBinding;
 // Фрагмент, который оповещает пользователя о намерении пройти опрос
 public class DetailFragment extends Fragment {
 
-    private FragmentDetailBinding binding;
-    String describe, nameUser;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        binding = FragmentDetailBinding.inflate(inflater, container, false);
+        FragmentDetailBinding binding = FragmentDetailBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        nameUser = ((MainActivity)getActivity()).name;
+        String describe = "";
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             describe = bundle.getString("describe");
@@ -43,11 +39,12 @@ public class DetailFragment extends Fragment {
         detailDesc.setText(describe);
 
         // Обработчик нажатия кнопки вперед
+        String finalDescribe = describe;
         buttonEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("describe", describe);
+                bundle.putString("describe", finalDescribe);
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
                 AnswersFragment fragment = new AnswersFragment();
                 fragment.setArguments(bundle);
